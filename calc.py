@@ -25,7 +25,8 @@ def perc(roll_no=""):
                         total_hrs += 1
                         present += float(i)
         file.close()
-        return present / total_hrs
+        print("Present: {}\nTotal hours: {}".format(present, total_hrs))
+        return [present / total_hrs * 100, present, total_hrs]
 
     else:
         attendance = dict()
@@ -53,11 +54,27 @@ def add(l1, l2):
     return temp
 
 
+def correction(percent):
+    p = int(input("Additional Present: ")) + percent[1]
+    h = int(input("Additional Hrs: ")) + percent[2]
+    return [p / h * 100, p, h]
+
+
 if __name__ == "__main__":
     if not exists("as.csv"):
         xl_csv("Attendance.xlsx")
-    # percent = perc("311120205018") * 100
-    # print("Total Percentage = %.2f" % percent, "%", sep="")
-    atdnce_dict = perc()
-    for i in atdnce_dict.keys():
-        print("{:<30}{:6.2f}%".format(i, atdnce_dict[i][0] / atdnce_dict[i][1] * 100))
+
+    percent = perc("311120205020")
+    print("Total Percentage = %.2f" % percent[0], "%", sep="")
+    yes = input("Any changes?")
+    if yes and (yes == "Y" or yes == "y"):
+        percent = correction(percent)
+    need = 0
+    while percent[0] < 75:
+        need += 1
+        percent[0] = (percent[1] + need) / (percent[2] + need) * 100
+    print("Need to attend {} classes for {:.2f}%.".format(need, percent[0]))
+
+    # atdnce_dict = perc()
+    # for i in atdnce_dict.keys():
+    #     print("{:<30}{:6.2f}%".format(i, atdnce_dict[i][0] / atdnce_dict[i][1] * 100))
