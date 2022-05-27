@@ -1,5 +1,4 @@
 from email.policy import default
-from numpy import roll
 import pandas as pd
 import csv
 from os.path import exists
